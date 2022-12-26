@@ -1,102 +1,87 @@
 #include <SFML/Graphics.hpp>
+#include "fractal-playground.h"
+#include <iostream>
 
-const double minRe = -2.0;
-const double maxRe = 1.0;
-const double minIm = -1.0;
-const double maxIm = 1.0;
-int width = 1920;
-int height = 1080;
+double minRe = -2.0;
+double maxRe = 1.0;
+double minIm = -1.0;
+double maxIm = 1.0;
 
 std::vector<sf::Color> colors = {
-        {35, 25, 66},
-        {224, 177, 203}
+        {38,  70,  83},
+        {231, 111, 81}
 };
 
-
-sf::Color gradient(const sf::Color& start, const sf::Color& end, float t)
-{
-    // Clamp t between 0 and 1
-    t = std::max(0.0f, std::min(1.0f, t));
-
-    // Calculate the gradient color
-    sf::Color result;
-    result.r = start.r + t * (end.r - start.r);
-    result.g = start.g + t * (end.g - start.g);
-    result.b = start.b + t * (end.b - start.b);
-    result.a = start.a + t * (end.a - start.a);
-    return result;
-}
-
-sf::Color mandelbrot(double x, double y, int maxIterations)
-{
-    double re = minRe + (maxRe - minRe) * x / (width - 1);
-    double im = minIm + (maxIm - minIm) * y / (height - 1);
+sf::Color mandelbrot(double x, double y, int maxIterations) {
+    double re = minRe + (maxRe - minRe) * x / (renderOptions.width - 1);
+    double im = minIm + (maxIm - minIm) * y / (renderOptions.height - 1);
 
     double zRe = re;
     double zIm = im;
     int iteration = 0;
-    while (iteration < 100 && zRe * zRe + zIm * zIm < 4)
-    {
+    while (iteration < 100 && zRe * zRe + zIm * zIm < 4) {
         double zReNew = zRe * zRe - zIm * zIm + re;
         double zImNew = 2 * zRe * zIm + im;
         zRe = zReNew;
         zIm = zImNew;
         iteration++;
     }
-    if (iteration < 100)
-        return gradient(colors[0], colors[1], (float)iteration / maxIterations);
-    else
+    if (iteration < 100) {
+        return gradient(colors[0], colors[1], (float) iteration / 100);
+    } else {
         return sf::Color::Black;
+    }
 }
 
-int main()
-{
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Window");
-    sf::Image image;
-    width = window.getSize().x;
-    height = window.getSize().y;
+void computeTexture(std::vector<sf::Uint8> &pixels, sf::Texture &texture, bool reallocate = false) {
+    if (reallocate) {
+        pixels.resize(renderOptions.width * renderOptions.height * 4);
+        texture.create(renderOptions.width, renderOptions.height);
+    }
 
-    image.create(width, height);
-    for (int x = 0; x < width; x++)
-    {
-        for (int y = 0; y < height; y++)
-        {
-            image.setPixel(x, y, mandelbrot(x, y, 100));
+    for (int x = 0; x < renderOptions.width; x++) {
+        for (int y = 0; y < renderOptions.height; y++) {
+            sf::Color color = mandelbrot(x, y, 100);
+            size_t index = (x + y * renderOptions.width) * 4;
+
+            pixels[index] = color.r;
+            pixels[index + 1] = color.g;
+            pixels[index + 2] = color.b;
+            pixels[index + 3] = color.a;
         }
     }
-    sf::Texture texture;
-    texture.loadFromImage(image);
+    texture.update(pixels.data());
+}
 
-    // Create a sprite from the texture
-    sf::Sprite sprite(texture);
+int main() {
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Window");
+    UiService uiService = UiService();
+    sf::Texture fractalTexture;
+    sf::Sprite fractal;
+    std::vector<sf::Uint8> pixels;
 
-    while (window.isOpen())
-    {
+    renderOptions.width = window.getSize().x;
+    renderOptions.height = window.getSize().y;
+    computeTexture(pixels, fractalTexture, true);
+    fractal.setTexture(fractalTexture);
+
+    while (window.isOpen()) {
         sf::Event event{};
 
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
                 window.close();
-            if (event.type == sf::Event::Resized)
-            {
-                width = event.size.width;
-                height = event.size.height;
-                image.create(width, height);
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        image.setPixel(x, y, mandelbrot(x, y, 100));
-                    }
-                }
-                texture.loadFromImage(image);
-                sprite.setTexture(texture);
+            } else if (event.type == sf::Event::Resized) {
+                renderOptions.width = event.size.width;
+                renderOptions.height = event.size.height;
+                computeTexture(pixels, fractalTexture, true);
+            } else {
+                uiService.dispatchEvent(event);
             }
         }
-
         window.clear();
-        window.draw(sprite);
+        window.draw(fractal);
+        uiService.draw(window);
         window.display();
     }
 }
