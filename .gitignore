@@ -1,3 +1,10 @@
+# build folder
+build/
+cmake-build-debug/
+
+# binary
+fractal-playground
+
 # Prerequisites
 *.d
 
