@@ -5,8 +5,16 @@ UiService::UiService() {
     this->font.loadFromFile("resources/Roboto-Regular.ttf");
 
     // reset view btn
-    this->components.push_back(new MaterialButton({0, 0}, {100, 50}, "Click me", font, []() {
+    this->components.push_back(new MaterialButton({15, 15}, "reset view", font, []() {
         std::cout << "Button clicked!" << std::endl;
+    }));
+    // fractal function selector
+    this->components.push_back(new MaterialSelector({200, 15}, {"test", "test2", "test3"}, font, [](int id) {
+        std::cout << "Selected: " << id << std::endl;
+    }));
+    // always add the view builder at the end
+    this->components.push_back(new ViewBuilder([](sf::Vector2f pos, sf::Vector2f size) {
+        std::cout << "ViewBuilder clicked!" << std::endl;
     }));
 }
 
@@ -34,5 +42,11 @@ void UiService::dispatchEvent(sf::Event event) {
         if (component->handleEvent(event)) {
             break;
         }
+    }
+}
+
+UiService::~UiService() {
+    for (auto &component: components) {
+        delete component;
     }
 }

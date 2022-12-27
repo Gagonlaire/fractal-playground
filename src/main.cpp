@@ -55,6 +55,7 @@ void computeTexture(std::vector<sf::Uint8> &pixels, sf::Texture &texture, bool r
 
 int main() {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Window");
+    window.setFramerateLimit(60);
     UiService uiService = UiService();
     sf::Texture fractalTexture;
     sf::Sprite fractal;

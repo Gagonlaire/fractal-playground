@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
 #include "utils.h"
 #include "UI.h"
 
@@ -19,4 +20,10 @@ struct RenderOptions {
     };
 };
 
+struct FractalFunction {
+    std::function<sf::Color(double, double, const RenderOptions&)> function;
+};
+
 static RenderOptions renderOptions = RenderOptions();
+
+static const std::unordered_map<std::string, FractalFunction> fractalFunctions = {};
