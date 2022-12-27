@@ -1,4 +1,5 @@
 #include "UI.h"
+#include "fractal-playground.h"
 #include <iostream>
 
 UiService::UiService() {
@@ -14,7 +15,11 @@ UiService::UiService() {
     }));
     // always add the view builder at the end
     this->components.push_back(new ViewBuilder([](sf::Vector2f pos, sf::Vector2f size) {
-        std::cout << "ViewBuilder clicked!" << std::endl;
+        options.minRe = options.minRe + (options.maxRe - options.minRe) * pos.x / (options.size.x - 1);
+        options.maxRe = options.minRe + (options.maxRe - options.minRe) * (pos.x + size.x) / (options.size.x - 1);
+        options.minIm = options.minRe / options.aspectRatio;
+        options.maxIm = options.maxRe / options.aspectRatio;
+        computeTexture();
     }));
 }
 
@@ -22,18 +27,6 @@ void UiService::draw(sf::RenderWindow &window) {
     for (auto &component: components) {
         component->draw(window);
     }
-}
-
-void UiService::addComponent(UIComponent *component) {
-    components.push_back(component);
-}
-
-void UiService::removeComponent(UIComponent *component) {
-    components.erase(
-            std::remove(components.begin(), components.end(), component),
-            components.end()
-    );
-    delete component;
 }
 
 void UiService::dispatchEvent(sf::Event event) {

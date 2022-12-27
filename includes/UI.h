@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+struct RenderOptions;
+
 const sf::Color WHITE = {255, 255, 255};
 const sf::Color DARK = {34, 39, 46};
 
@@ -27,10 +29,6 @@ public:
     ~UiService();
 
     void draw(sf::RenderWindow &window);
-
-    void addComponent(UIComponent *component);
-
-    void removeComponent(UIComponent *component);
 
     void dispatchEvent(sf::Event event);
 };

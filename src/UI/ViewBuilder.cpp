@@ -1,5 +1,4 @@
 #include <utility>
-
 #include "UI.h"
 
 ViewBuilder::ViewBuilder(std::function<void(sf::Vector2f, sf::Vector2f)> onSelection) {
