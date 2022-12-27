@@ -1,10 +1,12 @@
-#include "functions.h"
+#include "fractal-playground.h"
 
-sf::Color burning_ship(double re, double im) {
-    double x = 0;
-    double y = 0;
-    double new_x;
-    double new_y;
+#define MAX_ITERATIONS (300 * ITERATION_RATIO)
+
+sf::Color burning_ship(long double re, long double im) {
+    long double x = 0;
+    long double y = 0;
+    long double new_x;
+    long double new_y;
     int iteration = 0;
 
     while (x * x + y * y < 4 && iteration < MAX_ITERATIONS) {

@@ -13,15 +13,20 @@ struct RenderData {
 
 struct RenderOptions {
     size_t threadCount = std::thread::hardware_concurrency();
-    double minRe = -2.0;
-    double maxRe = 2.0;
-    double minIm = -1.0;
-    double maxIm = 1.0;
-    double aspectRatio = 1.0;
-    FractalFunction &function = const_cast<FractalFunction &>(fractalFunctions.at("mandelbrot"));
+    FractalFunction &function = const_cast<FractalFunction &>(fractalFunctions[0]);
+    long double minRe = std::get<0>(function.defaultView);
+    long double maxRe = std::get<1>(function.defaultView);
+    long double minIm = std::get<2>(function.defaultView);
+    long double maxIm = std::get<3>(function.defaultView);
     sf::Vector2u size = {0, 0};
 };
 
 extern RenderOptions options;
 
 extern RenderData data;
+
+typedef std::tuple<long double, long double, long double, long double> View;
+
+typedef std::vector<View> ViewHistory;
+
+extern ViewHistory history;

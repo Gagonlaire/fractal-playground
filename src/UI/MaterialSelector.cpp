@@ -2,7 +2,7 @@
 #include <iostream>
 
 MaterialSelector::MaterialSelector(sf::Vector2f position, std::vector<std::string> &options, sf::Font &font,
-                                   std::function<void(const std::string &)> onSelect) {
+                                   std::function<void(int)> onSelect) {
     this->onSelect = std::move(onSelect);
     if (options.empty()) {
         selectBox = new MaterialButton(position, "no options", font, []() {});
@@ -16,7 +16,7 @@ MaterialSelector::MaterialSelector(sf::Vector2f position, std::vector<std::strin
                                           [this, i, options]() {
                                               selectBox->setText(options[i]);
                                               isOpen = false;
-                                              this->onSelect(options[i]);
+                                              this->onSelect(i);
                                           });
         this->options.push_back(option);
     }

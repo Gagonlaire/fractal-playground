@@ -67,14 +67,14 @@ private:
     MaterialButton *selectBox;
     std::vector<MaterialButton *> options;
     bool isOpen = false;
-    std::function<void(const std::string &)> onSelect;
+    std::function<void(int)> onSelect;
 
 public:
     MaterialSelector(
             sf::Vector2f position,
             std::vector<std::string> &options,
             sf::Font &font,
-            std::function<void(const std::string &)> onSelect
+            std::function<void(int)> onSelect
     );
 
     void draw(sf::RenderWindow &window) override;
@@ -86,7 +86,6 @@ class ViewBuilder : public UIComponent {
 private:
     bool selecting = false;
     sf::RectangleShape selection;
-    sf::Vector2f start;
     std::function<void(sf::Vector2f, sf::Vector2f)> onSelection;
 
 public:

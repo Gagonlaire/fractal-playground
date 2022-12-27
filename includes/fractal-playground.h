@@ -9,4 +9,6 @@
 #include "functions.h"
 #include "data.h"
 
+#define ITERATION_RATIO 1
+
 void computeTexture();

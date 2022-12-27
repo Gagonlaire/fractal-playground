@@ -66,6 +66,6 @@ void MaterialButton::updateEnabled(bool enabled) {
 
 void MaterialButton::setText(const std::string &text) {
     this->_text.setString(text);
-    this->shape.setSize({this->_text.getGlobalBounds().width + 25, this->_text.getGlobalBounds().height + 30});
+    this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
     this->_text.setPosition(shape.getPosition() + sf::Vector2f(11, 5));
 }

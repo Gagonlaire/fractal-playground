@@ -1,23 +1,23 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <unordered_map>
 #include <complex>
 #include "utils.h"
-#include "enum.h"
 
 struct FractalFunction {
-    std::function<sf::Color(double, double)> function;
+    std::string name;
+    std::tuple<long double, long double, long double, long double> defaultView;
+    std::function<sf::Color(long double, long double)> function;
 };
 
-sf::Color mandelbrot(double re, double im);
-sf::Color mandlebar(double re, double im);
-sf::Color burning_ship(double re, double im);
-sf::Color julia(double re, double im);
+sf::Color mandelbrot(long double, long double);
+sf::Color mandlebar(long double, long double);
+sf::Color burning_ship(long double, long double);
+sf::Color julia(long double, long double);
 
-static const std::map<std::string, FractalFunction> fractalFunctions = {
-        {"mandelbrot", {mandelbrot}},
-        {"mandlebar", {mandlebar}},
-        {"burning_ship", {burning_ship}},
-        {"julia", {julia}}
+static const std::vector<FractalFunction> fractalFunctions = {
+        {"mandelbrot", {-2, 1, -1.5, 1.5}, mandelbrot},
+        {"mandlebar", {-2.1, 2.1, -2.1, 2.1}, mandlebar},
+        {"burning_ship", {-2.5, 1.5, -1.6, 1.6}, burning_ship},
+        {"julia", {-1.7, 1.7, -1, 1}, julia}
 };

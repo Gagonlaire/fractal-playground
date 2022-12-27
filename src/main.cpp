@@ -3,10 +3,9 @@
 
 RenderOptions options = RenderOptions();
 RenderData data = RenderData();
-std::atomic<bool> updatingTexture(false);
+ViewHistory history = ViewHistory();
 
 void computeTexture() {
-    updatingTexture = true;
     if (data.pixels.size() != options.size.x * options.size.y * 4) {
         data.pixels.resize(options.size.x * options.size.y * 4);
         data.texture.create(options.size.x, options.size.y);
@@ -15,10 +14,10 @@ void computeTexture() {
 
     std::vector<std::thread> threads;
     size_t start = 0;
-    double re = options.minRe;
-    double im = options.minIm;
-    double stepRe = (options.maxRe - options.minRe) / (options.size.x - 1);
-    double stepIm = (options.maxIm - options.minIm) / (options.size.y - 1);
+    long double re = options.minRe;
+    long double im = options.minIm;
+    long double stepRe = (options.maxRe - options.minRe) / (options.size.x - 1);
+    long double stepIm = (options.maxIm - options.minIm) / (options.size.y - 1);
 
     for (int i = 0; i < options.threadCount; i++, start += chunkSize) {
         threads.emplace_back([&](int threadId, size_t start, size_t end) {
@@ -27,8 +26,8 @@ void computeTexture() {
             int y = start / options.size.x;
 
             while (start < end) {
-                double complexRe = re + x * stepRe;
-                double complexIm = im + y * stepIm;
+                long double complexRe = re + x * stepRe;
+                long double complexIm = im + y * stepIm;
                 sf::Color color = options.function.function(complexRe, complexIm);
 
                 data.pixels[index] = color.r;
@@ -46,19 +45,15 @@ void computeTexture() {
         }, i, start, start + chunkSize);
     }
 
-    for (auto& thread : threads) {
+    for (auto &thread: threads) {
         thread.join();
     }
 
     data.texture.update(data.pixels.data());
-    updatingTexture = false;
 }
 
-void handle_window_resize(sf::RenderWindow& window) {
+void handle_window_resize(sf::RenderWindow &window) {
     options.size = window.getSize();
-    options.aspectRatio = (float) options.size.x / (float) options.size.y;
-    options.minIm = options.minRe / options.aspectRatio;
-    options.maxIm = options.maxRe / options.aspectRatio;
 }
 
 int main() {
@@ -83,10 +78,7 @@ int main() {
                 uiService.dispatchEvent(event);
             }
         }
-        window.clear();
-        if (!updatingTexture) {
-            window.draw(data.sprite);
-        }
+        window.draw(data.sprite);
         uiService.draw(window);
         window.display();
     }
