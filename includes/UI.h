@@ -67,14 +67,14 @@ private:
     MaterialButton *selectBox;
     std::vector<MaterialButton *> options;
     bool isOpen = false;
-    std::function<void(int)> onSelect;
+    std::function<void(const std::string &)> onSelect;
 
 public:
     MaterialSelector(
             sf::Vector2f position,
-            const std::vector<std::string> &options,
+            std::vector<std::string> &options,
             sf::Font &font,
-            std::function<void(int)> onSelect
+            std::function<void(const std::string &)> onSelect
     );
 
     void draw(sf::RenderWindow &window) override;

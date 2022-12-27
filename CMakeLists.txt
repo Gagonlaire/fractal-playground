@@ -12,7 +12,7 @@ if (APPLE)
     set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 endif()
 
-set(SOURCE_FILES src/main.cpp src/utils.cpp src/UI/UI.cpp src/UI/MaterialButton.cpp src/UI/ViewBuilder.cpp src/UI/MaterialSelect.cpp)
+set(SOURCE_FILES src/main.cpp src/utils.cpp src/UI/UI.cpp src/UI/MaterialButton.cpp src/UI/ViewBuilder.cpp src/UI/MaterialSelector.cpp includes/functions.h includes/data.h src/functions/mandlebrot.cpp src/functions/mandlebar.cpp includes/enum.h src/functions/burning_ships.cpp src/functions/julia.cpp)
 add_executable(fractal-playground ${SOURCE_FILES})
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

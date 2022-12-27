@@ -5,31 +5,6 @@ RenderOptions options = RenderOptions();
 RenderData data = RenderData();
 std::atomic<bool> updatingTexture(false);
 
-std::vector<sf::Color> colors = {
-        {38,  70,  83},
-        {231, 111, 81}
-};
-
-sf::Color mandelbrot(double re, double im) {
-    double zRe = re;
-    double zIm = im;
-    int iteration;
-
-    for (iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
-        if (zRe * zRe + zIm * zIm >= 4) break;
-
-        double zReNew = zRe * zRe - zIm * zIm + re;
-        double zImNew = 2 * zRe * zIm + im;
-        zRe = zReNew;
-        zIm = zImNew;
-    }
-    if (iteration < MAX_ITERATIONS) {
-        return gradient(colors[0], colors[1], (float) iteration / MAX_ITERATIONS);
-    } else {
-        return sf::Color::Black;
-    }
-}
-
 void computeTexture() {
     updatingTexture = true;
     if (data.pixels.size() != options.size.x * options.size.y * 4) {
@@ -54,7 +29,7 @@ void computeTexture() {
             while (start < end) {
                 double complexRe = re + x * stepRe;
                 double complexIm = im + y * stepIm;
-                sf::Color color = mandelbrot(complexRe, complexIm);
+                sf::Color color = options.function.function(complexRe, complexIm);
 
                 data.pixels[index] = color.r;
                 data.pixels[index + 1] = color.g;
@@ -87,7 +62,6 @@ void handle_window_resize(sf::RenderWindow& window) {
 }
 
 int main() {
-    std::thread updateThread(computeTexture);
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Window");
     UiService uiService = UiService();
 

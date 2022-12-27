@@ -25,6 +25,8 @@ bool ViewBuilder::handleEvent(sf::Event event) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             selecting = false;
             onSelection(selection.getPosition(), selection.getSize());
+            selection.setSize(sf::Vector2f(0, 0));
+            selection.setPosition(0, 0);
         }
     } else if (event.type == sf::Event::MouseMoved) {
         if (!selecting) return false;

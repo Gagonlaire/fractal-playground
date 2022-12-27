@@ -1,9 +1,13 @@
 #include "UI.h"
 #include <iostream>
 
-MaterialSelector::MaterialSelector(sf::Vector2f position, const std::vector<std::string> &options, sf::Font &font,
-                                   std::function<void(int)> onSelect) {
+MaterialSelector::MaterialSelector(sf::Vector2f position, std::vector<std::string> &options, sf::Font &font,
+                                   std::function<void(const std::string &)> onSelect) {
     this->onSelect = std::move(onSelect);
+    if (options.empty()) {
+        selectBox = new MaterialButton(position, "no options", font, []() {});
+        return;
+    }
     selectBox = new MaterialButton(position, options[0], font, [this]() {
         isOpen = !isOpen;
     });
@@ -12,7 +16,7 @@ MaterialSelector::MaterialSelector(sf::Vector2f position, const std::vector<std:
                                           [this, i, options]() {
                                               selectBox->setText(options[i]);
                                               isOpen = false;
-                                              this->onSelect(i);
+                                              this->onSelect(options[i]);
                                           });
         this->options.push_back(option);
     }

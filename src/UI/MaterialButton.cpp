@@ -10,7 +10,7 @@ MaterialButton::MaterialButton(sf::Vector2f position, const std::string &text, s
     this->_text.setString(text);
     this->_text.setFillColor(WHITE);
     this->_text.setFont(font);
-    this->shape.setSize({this->_text.getGlobalBounds().width + 25, this->_text.getGlobalBounds().height + 30});
+    this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
     this->_text.setPosition(position + sf::Vector2f(11, 5));
     this->shape.setOutlineThickness(2);
 }

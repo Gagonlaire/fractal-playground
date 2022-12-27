@@ -9,9 +9,15 @@ UiService::UiService() {
     this->components.push_back(new MaterialButton({15, 15}, "reset view", font, []() {
         std::cout << "Button clicked!" << std::endl;
     }));
+    // build options from fractalFunctions map
+    std::vector<std::string> _options;
+    for (auto &item: fractalFunctions) {
+        _options.push_back(item.first);
+    }
     // fractal function selector
-    this->components.push_back(new MaterialSelector({200, 15}, {"test", "test2", "test3"}, font, [](int id) {
-        std::cout << "Selected: " << id << std::endl;
+    this->components.push_back(new MaterialSelector({200, 15}, _options, font, [](const std::string &option) {
+        options.function = fractalFunctions.at(option);
+        computeTexture();
     }));
     // always add the view builder at the end
     this->components.push_back(new ViewBuilder([](sf::Vector2f pos, sf::Vector2f size) {
@@ -33,6 +39,7 @@ void UiService::dispatchEvent(sf::Event event) {
     for (auto &component: components) {
         // if component return true, stop the event propagation
         if (component->handleEvent(event)) {
+            std::cout << "Event handled by component" << std::endl;
             break;
         }
     }
