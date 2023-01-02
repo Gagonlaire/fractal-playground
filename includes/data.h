@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <thread>
+#include "functions.h"
 
 struct RenderData {
     std::vector<sf::Uint8> pixels;

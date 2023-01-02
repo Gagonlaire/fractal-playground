@@ -1,5 +1,6 @@
-#include "fractal-playground.h"
+#include "utils.h"
 
+#define ITERATION_RATIO 1
 #define MAX_ITERATIONS (300 * ITERATION_RATIO)
 
 sf::Color burning_ship(long double re, long double im) {

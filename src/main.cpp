@@ -1,5 +1,5 @@
-#include <SFML/Graphics.hpp>
-#include "fractal-playground.h"
+#include "data.h"
+#include "UI.h"
 
 RenderOptions options = RenderOptions();
 RenderData data = RenderData();
@@ -54,6 +54,13 @@ void computeTexture() {
 
 void handle_window_resize(sf::RenderWindow &window) {
     options.size = window.getSize();
+
+    double aspectRatio = (double) options.size.x / options.size.y;
+    long double newWidth = (options.maxIm - options.minIm) * aspectRatio;
+    long double diff = newWidth - (options.maxRe - options.minRe);
+
+    options.minRe -= diff / 2;
+    options.maxRe += diff / 2;
 }
 
 int main() {
@@ -72,6 +79,7 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             } else if (event.type == sf::Event::Resized) {
+                std::cout << "window resized" << std::endl;
                 handle_window_resize(window);
                 computeTexture();
             } else {

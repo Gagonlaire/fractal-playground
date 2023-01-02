@@ -1,5 +1,6 @@
 #include "UI.h"
 #include "fractal-playground.h"
+#include "data.h"
 #include <iostream>
 
 UiService::UiService() {
@@ -50,6 +51,12 @@ UiService::UiService() {
         options.maxRe = options.minRe + (options.maxRe - options.minRe) * (pos.x + size.x) / (options.size.x - 1);
         options.minIm = options.minIm + (options.maxIm - options.minIm) * pos.y / (options.size.y - 1);
         options.maxIm = options.minIm + (options.maxIm - options.minIm) * (pos.y + size.y) / (options.size.y - 1);
+        double aspectRatio = (double) options.size.x / options.size.y;
+        long double newWidth = (options.maxIm - options.minIm) * aspectRatio;
+        long double diff = newWidth - (options.maxRe - options.minRe);
+
+        options.minRe -= diff / 2;
+        options.maxRe += diff / 2;
         computeTexture();
     }));
 }

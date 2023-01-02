@@ -7,3 +7,5 @@ sf::Color getColorFromIterations(int iterations) {
         static_cast<sf::Uint8>((iterations * 7) % 256)
     };
 }
+
+

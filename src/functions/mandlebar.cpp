@@ -1,5 +1,7 @@
 #include "fractal-playground.h"
+#include "utils.h"
 
+#define ITERATION_RATIO 1
 #define MAX_ITERATIONS (200 * ITERATION_RATIO)
 
 sf::Color mandlebar(long double re, long double im) {
