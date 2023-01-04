@@ -1,9 +1,15 @@
 #include "data.h"
 #include "UI.h"
+#include "fractal-playground.h"
 
 RenderOptions options = RenderOptions();
 RenderData data = RenderData();
-ViewHistory history = ViewHistory();
+auto history = std::vector<ComplexView>();
+
+void handle_window_resize(sf::RenderWindow &window) {
+    options.size = window.getSize();
+    options.view.adaptToWindowSize(options.size);
+}
 
 void computeTexture() {
     if (data.pixels.size() != options.size.x * options.size.y * 4) {
@@ -11,13 +17,12 @@ void computeTexture() {
         data.texture.create(options.size.x, options.size.y);
     }
     const int chunkSize = options.size.x * options.size.y / options.threadCount;
-
     std::vector<std::thread> threads;
     size_t start = 0;
-    long double re = options.minRe;
-    long double im = options.minIm;
-    long double stepRe = (options.maxRe - options.minRe) / (options.size.x - 1);
-    long double stepIm = (options.maxIm - options.minIm) / (options.size.y - 1);
+    long double re = options.view.minRe;
+    long double im = options.view.minIm;
+    long double stepRe = (options.view.maxRe - options.view.minRe) / (options.size.x - 1);
+    long double stepIm = (options.view.maxIm - options.view.minIm) / (options.size.y - 1);
 
     for (int i = 0; i < options.threadCount; i++, start += chunkSize) {
         threads.emplace_back([&](int threadId, size_t start, size_t end) {
@@ -50,17 +55,6 @@ void computeTexture() {
     }
 
     data.texture.update(data.pixels.data());
-}
-
-void handle_window_resize(sf::RenderWindow &window) {
-    options.size = window.getSize();
-
-    double aspectRatio = (double) options.size.x / options.size.y;
-    long double newWidth = (options.maxIm - options.minIm) * aspectRatio;
-    long double diff = newWidth - (options.maxRe - options.minRe);
-
-    options.minRe -= diff / 2;
-    options.maxRe += diff / 2;
 }
 
 int main() {

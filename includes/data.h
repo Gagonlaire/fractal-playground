@@ -5,6 +5,7 @@
 #include <iostream>
 #include <thread>
 #include "functions.h"
+#include "complex-view.h"
 
 struct RenderData {
     std::vector<sf::Uint8> pixels;
@@ -13,12 +14,9 @@ struct RenderData {
 };
 
 struct RenderOptions {
-    size_t threadCount = std::thread::hardware_concurrency();
+    size_t threadCount = std::thread::hardware_concurrency() - 1;
     FractalFunction &function = const_cast<FractalFunction &>(fractalFunctions[0]);
-    long double minRe = std::get<0>(function.defaultView);
-    long double maxRe = std::get<1>(function.defaultView);
-    long double minIm = std::get<2>(function.defaultView);
-    long double maxIm = std::get<3>(function.defaultView);
+    ComplexView view = function.defaultView;
     sf::Vector2u size = {0, 0};
 };
 
@@ -26,8 +24,4 @@ extern RenderOptions options;
 
 extern RenderData data;
 
-typedef std::tuple<long double, long double, long double, long double> View;
-
-typedef std::vector<View> ViewHistory;
-
-extern ViewHistory history;
+extern std::vector<ComplexView> history;
