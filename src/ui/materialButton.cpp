@@ -1,14 +1,14 @@
 #include <utility>
-#include "UI.h"
+#include "ui.h"
 
 MaterialButton::MaterialButton(sf::Vector2f position, const std::string &text, sf::Font &font,
                                std::function<void()> onClick) {
     this->onClick = std::move(onClick);
     this->shape.setPosition(position);
-    this->shape.setFillColor(DARK);
-    this->shape.setOutlineColor(WHITE);
+    this->shape.setFillColor(sf::Color::Black);
+    this->shape.setOutlineColor(sf::Color::White);
     this->_text.setString(text);
-    this->_text.setFillColor(WHITE);
+    this->_text.setFillColor(sf::Color::White);
     this->_text.setFont(font);
     this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
     this->_text.setPosition(position + sf::Vector2f(11, 5));
@@ -32,13 +32,13 @@ bool MaterialButton::handleEvent(sf::Event event) {
         }
     } else if (event.type == sf::Event::MouseMoved) {
         if (shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
-            shape.setFillColor(WHITE);
-            _text.setFillColor(DARK);
-            shape.setOutlineColor(DARK);
+            shape.setFillColor(sf::Color::White);
+            _text.setFillColor(sf::Color::Black);
+            shape.setOutlineColor(sf::Color::Black );
         } else {
-            shape.setFillColor(DARK);
-            _text.setFillColor(WHITE);
-            shape.setOutlineColor(WHITE);
+            shape.setFillColor(sf::Color::Black);
+            _text.setFillColor(sf::Color::White);
+            shape.setOutlineColor(sf::Color::White);
         }
     }
     return false;
@@ -68,4 +68,13 @@ void MaterialButton::setText(const std::string &text) {
     this->_text.setString(text);
     this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
     this->_text.setPosition(shape.getPosition() + sf::Vector2f(11, 5));
+}
+
+void MaterialButton::setPosition(sf::Vector2f position) {
+    this->shape.setPosition(position);
+    this->_text.setPosition(position + sf::Vector2f(11, 5));
+}
+
+sf::Vector2f MaterialButton::getPosition() {
+    return this->shape.getPosition();
 }

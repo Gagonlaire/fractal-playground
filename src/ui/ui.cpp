@@ -1,7 +1,5 @@
-#include "UI.h"
-#include "fractal-playground.h"
+#include "ui.h"
 #include "data.h"
-#include <iostream>
 
 UiService::UiService() {
     this->font.loadFromFile("resources/Roboto-Regular.ttf");

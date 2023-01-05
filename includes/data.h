@@ -5,7 +5,7 @@
 #include <iostream>
 #include <thread>
 #include "functions.h"
-#include "complex-view.h"
+#include "complexView.h"
 
 struct RenderData {
     std::vector<sf::Uint8> pixels;

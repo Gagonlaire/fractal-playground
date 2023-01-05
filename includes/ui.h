@@ -6,9 +6,6 @@
 
 struct RenderOptions;
 
-const sf::Color WHITE = {255, 255, 255};
-const sf::Color DARK = {34, 39, 46};
-
 class UIComponent {
 public:
     virtual void draw(sf::RenderWindow &window) = 0;
@@ -55,17 +52,18 @@ public:
 
     void updateEnabled(bool enabled);
 
+    void setPosition(sf::Vector2f);
+
+    sf::Vector2f getPosition();
+
     void setText(const std::string &text);
 };
-
-// @TODO: make a MaterialSlider
-// @TODO: make a MaterialCheckbox
-// @TODO: make a MaterialSelect
 
 class MaterialSelector : public UIComponent {
 private:
     MaterialButton *selectBox;
-    std::vector<MaterialButton *> options;
+    std::vector<std::string> options;
+    std::vector<MaterialButton *> options_btn;
     bool isOpen = false;
     std::function<void(int)> onSelect;
 

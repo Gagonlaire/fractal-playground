@@ -1,4 +1,4 @@
-#include "complex-view.h"
+#include "complexView.h"
 
 ComplexView::ComplexView(long double minRe, long double maxRe, long double minIm, long double maxIm) {
     this->minRe = minRe;
@@ -24,18 +24,20 @@ void ComplexView::from(ComplexView other, sf::Vector2u size) {
 }
 
 void ComplexView::adaptToWindowSize(sf::Vector2u size) {
-    double aspectRatio = (double) size.x / size.y;
+    long double width = this->maxRe - this->minRe;
+    long double height = this->maxIm - this->minIm;
+    long double aspectRatio = (long double) size.x / size.y;
 
-    if (size.x > size.y) {
-        long double newWidth = (maxRe - minRe) * aspectRatio;
-        long double halfWidth = (newWidth - (maxRe - minRe)) / 2;
-        minRe -= halfWidth;
-        maxRe += halfWidth;
+    if (width / height > aspectRatio) {
+        long double newWidth = height * aspectRatio;
+        long double diff = (width - newWidth) / 2;
+        this->minRe += diff;
+        this->maxRe -= diff;
     } else {
-        long double newHeight = (maxIm - minIm) / aspectRatio;
-        long double halfHeight = (newHeight - (maxIm - minIm)) / 2;
-        minIm -= halfHeight;
-        maxIm += halfHeight;
+        long double newHeight = width / aspectRatio;
+        long double diff = (height - newHeight) / 2;
+        this->minIm += diff;
+        this->maxIm -= diff;
     }
 }
 

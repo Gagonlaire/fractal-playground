@@ -17,14 +17,14 @@ endif ()
 set(SOURCE_FILES
         src/main.cpp
         src/utils.cpp
-        src/UI/UI.cpp
-        src/UI/MaterialButton.cpp
-        src/UI/ViewBuilder.cpp
-        src/UI/MaterialSelector.cpp
+        src/ui/ui.cpp
+        src/ui/materialButton.cpp
+        src/ui/viewBuilder.cpp
+        src/ui/materialSelector.cpp
         src/functions/mandlebrot.cpp
         src/functions/mandlebar.cpp
         src/functions/burning_ships.cpp
-        src/functions/julia.cpp src/ComplexView.cpp includes/complex-view.h)
+        src/functions/julia.cpp src/complexView.cpp includes/complexView.h)
 add_executable(fractal-playground ${SOURCE_FILES})
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

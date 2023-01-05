@@ -1,6 +1,5 @@
 #include "data.h"
-#include "UI.h"
-#include "fractal-playground.h"
+#include "ui.h"
 
 RenderOptions options = RenderOptions();
 RenderData data = RenderData();
@@ -8,14 +7,12 @@ auto history = std::vector<ComplexView>();
 
 void handle_window_resize(sf::RenderWindow &window) {
     options.size = window.getSize();
+    data.pixels.resize(options.size.x * options.size.y * 4);
+    data.texture.create(options.size.x, options.size.y);
     options.view.adaptToWindowSize(options.size);
 }
 
 void computeTexture() {
-    if (data.pixels.size() != options.size.x * options.size.y * 4) {
-        data.pixels.resize(options.size.x * options.size.y * 4);
-        data.texture.create(options.size.x, options.size.y);
-    }
     const int chunkSize = options.size.x * options.size.y / options.threadCount;
     std::vector<std::thread> threads;
     size_t start = 0;
@@ -73,7 +70,6 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             } else if (event.type == sf::Event::Resized) {
-                std::cout << "window resized" << std::endl;
                 handle_window_resize(window);
                 computeTexture();
             } else {

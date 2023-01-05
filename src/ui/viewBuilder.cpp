@@ -1,5 +1,5 @@
 #include <utility>
-#include "UI.h"
+#include "ui.h"
 
 ViewBuilder::ViewBuilder(std::function<void(sf::Vector2f, sf::Vector2f)> onSelection) {
     this->onSelection = std::move(onSelection);
