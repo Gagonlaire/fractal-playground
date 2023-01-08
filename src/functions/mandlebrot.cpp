@@ -1,14 +1,12 @@
 #include "utils.h"
 #include "functions.h"
 
-#define MAX_ITERATIONS (500 * ITERATION_RATIO)
-
-sf::Color mandelbrot(long double re, long double im) {
+sf::Color mandelbrot(long double re, long double im, int maxIterations) {
     long double zRe = re;
     long double zIm = im;
     int iterations;
 
-    for (iterations = 0; iterations < MAX_ITERATIONS; iterations++) {
+    for (iterations = 0; iterations < maxIterations; iterations++) {
         if (zRe * zRe + zIm * zIm >= 4) break;
 
         long double zReNew = zRe * zRe - zIm * zIm + re;
@@ -16,8 +14,8 @@ sf::Color mandelbrot(long double re, long double im) {
         zRe = zReNew;
         zIm = zImNew;
     }
-    if (iterations == MAX_ITERATIONS) {
+    if (iterations == maxIterations) {
         return sf::Color::Black;
     }
-    return getColorFromIterations(iterations, MAX_ITERATIONS);
+    return getColorFromIterations(iterations, maxIterations);
 }

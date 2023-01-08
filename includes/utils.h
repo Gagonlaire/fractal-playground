@@ -13,6 +13,9 @@ sf::Color getColorFromIterations(int iterations, int maxIterations);
 
 /*
  * @brief Custom implementation of the for_each/execution::par algorithm
+ * @param first The first element of the range
+ * @param last The last element of the range
+ * @param func The function to apply to each element
  */
 template<typename Iterator, typename Function>
 void parallelForEach(Iterator first, Iterator last, Function func) {
@@ -28,8 +31,9 @@ void parallelForEach(Iterator first, Iterator last, Function func) {
 
     for (size_t i = 0; i < (num_threads - 1); ++i) {
         Iterator block_end = block_start;
-        std::advance(block_end, block_size);
         size_t chunk_start_index = std::distance(first, block_start);
+
+        std::advance(block_end, block_size);
         threads[i] = std::thread([=, &func] {
             size_t index = chunk_start_index;
             for (Iterator it = block_start; it != block_end; ++it, ++index) {
@@ -40,6 +44,7 @@ void parallelForEach(Iterator first, Iterator last, Function func) {
     }
     size_t chunk_start_index = std::distance(first, block_start);
     size_t index = chunk_start_index;
+
     for (Iterator it = block_start; it != last; ++it, ++index) {
         func(*it, index);
     }

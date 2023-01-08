@@ -3,8 +3,8 @@
 #include "utils.h"
 #include <array>
 
-RenderOptions options = RenderOptions();
-RenderData data = RenderData();
+RenderOptions options;
+RenderData data;
 std::vector<ComplexView> history;
 
 void handle_window_resize(sf::RenderWindow &window) {
@@ -26,7 +26,7 @@ void computeTexture() {
         long double complexRe = re + x * stepRe;
         long double complexIm = im + y * stepIm;
 
-        sf::Color color = options.function.function(complexRe, complexIm);
+        sf::Color color = options.function.function(complexRe, complexIm, options.maxIterations);
         pixel = {color.r, color.g, color.b, color.a};
     });
 
@@ -34,7 +34,7 @@ void computeTexture() {
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "My Window");
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Fractal Playground");
     UiService uiService = UiService();
 
     window.setFramerateLimit(60);

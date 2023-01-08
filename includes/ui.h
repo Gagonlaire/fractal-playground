@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+using std::string, std::vector;
+
 struct RenderOptions;
 
 class UIComponent {
@@ -30,6 +32,21 @@ public:
     void dispatchEvent(sf::Event event);
 };
 
+class MaterialBox : public UIComponent {
+private:
+    sf::RectangleShape _shape;
+    sf::Text _text;
+
+public:
+    MaterialBox(sf::Vector2f position, sf::Vector2f size, sf::Font &font, const string &text);
+
+    void draw(sf::RenderWindow &window) override;
+
+    void setText(const string &text);
+
+    bool handleEvent(sf::Event event) override;
+};
+
 class MaterialButton : public UIComponent {
 private:
     sf::RectangleShape _shape;
@@ -41,7 +58,7 @@ private:
 public:
     MaterialButton(
             sf::Vector2f position,
-            const std::string &text,
+            const string &text,
             sf::Font &font,
             std::function<void()> onClick
     );
@@ -56,13 +73,13 @@ public:
 
     sf::Vector2f getPosition();
 
-    void setText(const std::string &text);
+    void setText(const string &text);
 };
 
 class MaterialSelector : public UIComponent {
 private:
     MaterialButton *_selectBox;
-    std::vector<std::string> _options;
+    std::vector<string> _options;
     std::vector<MaterialButton *> _options_btn;
     bool _isOpen = false;
     std::function<void(int)> _onSelect;
@@ -70,7 +87,7 @@ private:
 public:
     MaterialSelector(
             sf::Vector2f position,
-            std::vector<std::string> &options,
+            vector<string> &options,
             sf::Font &font,
             std::function<void(int)> onSelect
     );

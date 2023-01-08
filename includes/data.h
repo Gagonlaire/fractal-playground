@@ -14,7 +14,7 @@ struct RenderData {
 };
 
 struct RenderOptions {
-    size_t threadCount = std::thread::hardware_concurrency() - 1;
+    int maxIterations = fractalFunctions[0].defaultMaxIterations;
     FractalFunction &function = const_cast<FractalFunction &>(fractalFunctions[0]);
     ComplexView view = function.defaultView;
     sf::Vector2u size = {0, 0};
