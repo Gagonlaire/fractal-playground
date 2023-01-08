@@ -26,7 +26,9 @@ set(SOURCE_FILES
         src/functions/burningShips.cpp
         src/functions/julia.cpp
         src/complexView.cpp
-        includes/complexView.h src/ui/materialBox.cpp)
+        includes/complexView.h
+        src/ui/materialBox.cpp
+        src/ui/row.cpp)
 add_executable(fractal-playground ${SOURCE_FILES})
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

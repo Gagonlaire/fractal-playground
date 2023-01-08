@@ -20,7 +20,7 @@ void MaterialButton::draw(sf::RenderWindow &window) {
     window.draw(_text);
 }
 
-bool MaterialButton::handleEvent(sf::Event event) {
+bool MaterialButton::handleEvent(sf::RenderWindow &window, sf::Event event) {
     if (this->_isDisabled) {return false;}
 
     if (event.type == sf::Event::MouseButtonPressed) {
@@ -31,14 +31,27 @@ bool MaterialButton::handleEvent(sf::Event event) {
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
-        if (_shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+        bool contains = _shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y);
+
+        if (contains && !_isHovered) {
+            _isHovered = true;
             _shape.setFillColor(sf::Color::White);
             _text.setFillColor(sf::Color::Black);
             _shape.setOutlineColor(sf::Color::Black );
-        } else {
+
+            sf::Cursor cursor;
+            cursor.loadFromSystem(sf::Cursor::Hand);
+            window.setMouseCursor(cursor);
+        }
+        if (!contains && _isHovered) {
+            _isHovered = false;
             _shape.setFillColor(sf::Color::Black);
             _text.setFillColor(sf::Color::White);
             _shape.setOutlineColor(sf::Color::White);
+
+            sf::Cursor cursor;
+            cursor.loadFromSystem(sf::Cursor::Arrow);
+            window.setMouseCursor(cursor);
         }
     }
     return false;
@@ -75,6 +88,6 @@ void MaterialButton::setPosition(sf::Vector2f position) {
     this->_text.setPosition(position + sf::Vector2f(11, 5));
 }
 
-sf::Vector2f MaterialButton::getPosition() {
-    return this->_shape.getPosition();
+sf::Vector2f MaterialButton::getSize() {
+    return this->_shape.getSize();
 }

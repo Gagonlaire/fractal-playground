@@ -33,13 +33,24 @@ void MaterialSelector::draw(sf::RenderWindow &window) {
     }
 }
 
-bool MaterialSelector::handleEvent(sf::Event event) {
+bool MaterialSelector::handleEvent(sf::RenderWindow &window, sf::Event event) {
     if (_isOpen) {
         for (auto btn: _options_btn) {
-            if (btn->handleEvent(event)) {
+            if (btn->handleEvent(window, event)) {
                 return true;
             }
         }
     }
-    return _selectBox->handleEvent(event);
+    return _selectBox->handleEvent(window, event);
+}
+
+sf::Vector2f MaterialSelector::getSize() {
+    return _selectBox->getSize();
+}
+
+void MaterialSelector::setPosition(sf::Vector2f position) {
+    _selectBox->setPosition(position);
+    for (int i = 0; i < _options_btn.size(); i++) {
+        _options_btn[i]->setPosition(position + sf::Vector2f(0, SELECTOR_OFFSET * (i + 1)));
+    }
 }

@@ -5,6 +5,9 @@ UiService::UiService() {
     // init various resources
     this->_font.loadFromFile("resources/Roboto-Regular.ttf");
 
+    // build main row
+    auto row = new Row({0, 15}, 15, {});
+
     // build options from fractalFunctions map
     std::vector<std::string> _options;
     for (auto &item: fractalFunctions) {
@@ -12,7 +15,7 @@ UiService::UiService() {
     }
 
     // create ui elements
-    auto reset_btn = new MaterialButton({15, 15}, "reset view", _font, []() {
+    auto reset_btn = new MaterialButton({0, 0}, "reset view", _font, []() {
         auto view = options.function.defaultView;
 
         view.adaptToWindowSize(options.size);
@@ -20,7 +23,7 @@ UiService::UiService() {
         computeTexture();
         history.clear();
     });
-    auto back_btn = new MaterialButton({190, 15}, "go back", _font, []() {
+    auto back_btn = new MaterialButton({0, 0}, "go back", _font, []() {
         if (!history.empty()) {
             auto value = history.back();
 
@@ -53,25 +56,36 @@ UiService::UiService() {
         computeTexture();
     });
     // build the iteration box before +/- buttons to send a reference to them
-    auto max_iterations = new MaterialBox({590, 15}, {100, 50}, _font,
+    auto max_iterations = new MaterialBox({0, 0}, {100, 50}, _font,
                                           "iterations: " + std::to_string(options.maxIterations));
-    auto increment_btn = new MaterialButton({532, 15}, "+", _font, [max_iterations]() {
+    auto increment_btn = new MaterialButton({0, 0}, "+", _font, [max_iterations, row]() {
         options.maxIterations += options.maxIterations * ITERATION_RATIO / 10;
         max_iterations->setText("iterations: " + std::to_string(options.maxIterations));
+        row->update();
         computeTexture();
     });
-    auto decrement_btn = new MaterialButton({822, 15}, "-", _font, [max_iterations]() {
+    auto decrement_btn = new MaterialButton({0, 0}, "-", _font, [max_iterations, row]() {
         if (options.maxIterations > 1) {
             options.maxIterations -= options.maxIterations * ITERATION_RATIO / 10;
             max_iterations->setText("iterations: " + std::to_string(options.maxIterations));
+            row->update();
+            computeTexture();
+        }
+    });
+    auto reset_iterations = new MaterialButton({0, 0}, "reset iterations", _font, [max_iterations, row]() {
+        if (options.maxIterations != options.function.defaultMaxIterations) {
+            options.maxIterations = options.function.defaultMaxIterations;
+            max_iterations->setText("iterations: " + std::to_string(options.maxIterations));
+            row->update();
             computeTexture();
         }
     });
     // the selector also need a reference to the iteration box
-    auto selector = new MaterialSelector({337, 15}, _options, _font, [max_iterations](int index) {
+    auto selector = new MaterialSelector({337, 15}, _options, _font, [max_iterations, row](int index) {
         options.function = fractalFunctions[index];
         options.maxIterations = options.function.defaultMaxIterations * ITERATION_RATIO;
         max_iterations->setText("iterations: " + std::to_string(options.maxIterations));
+        row->update();
         options.view = options.function.defaultView;
         options.view.adaptToWindowSize(options.size);
         history.clear();
@@ -79,16 +93,9 @@ UiService::UiService() {
     });
 
     // mount ui elements
-    this->_components = {
-            reset_btn,
-            back_btn,
-            selector,
-            increment_btn,
-            max_iterations,
-            decrement_btn,
-            // view builder must be the last element to be drawn
-            view_builder
-    };
+    row->push_back({reset_btn, back_btn, selector, decrement_btn, max_iterations, increment_btn, reset_iterations,
+                    view_builder});
+    this->_components.push_back(row);
 }
 
 void UiService::draw(sf::RenderWindow &window) {
@@ -97,10 +104,10 @@ void UiService::draw(sf::RenderWindow &window) {
     }
 }
 
-void UiService::dispatchEvent(sf::Event event) {
+void UiService::dispatchEvent(sf::RenderWindow &window, sf::Event event) {
     for (auto &component: _components) {
         // if component return true, stop the event propagation
-        if (component->handleEvent(event)) {
+        if (component->handleEvent(window, event)) {
             break;
         }
     }

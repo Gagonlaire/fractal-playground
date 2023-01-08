@@ -10,9 +10,13 @@ struct RenderOptions;
 
 class UIComponent {
 public:
-    virtual void draw(sf::RenderWindow &window) = 0;
+    virtual void draw(sf::RenderWindow &) = 0;
 
-    virtual bool handleEvent(sf::Event event) = 0;
+    virtual bool handleEvent(sf::RenderWindow &, sf::Event) = 0;
+
+    virtual sf::Vector2f getSize() = 0;
+
+    virtual void setPosition(sf::Vector2f) = 0;
 
     virtual ~UIComponent() = default;
 };
@@ -27,9 +31,35 @@ public:
 
     ~UiService();
 
-    void draw(sf::RenderWindow &window);
+    void draw(sf::RenderWindow &);
 
-    void dispatchEvent(sf::Event event);
+    void dispatchEvent(sf::RenderWindow &, sf::Event);
+};
+
+class Row : public UIComponent {
+private:
+    std::vector<UIComponent *> _components;
+    sf::Vector2f _size;
+    sf::Vector2f _position;
+    float _spacing;
+    float _width;
+
+public:
+    Row(sf::Vector2f, float, const vector<UIComponent *> &);
+
+    void draw(sf::RenderWindow &) override;
+
+    bool handleEvent(sf::RenderWindow &, sf::Event) override;
+
+    sf::Vector2f getSize() override;
+
+    void setPosition(sf::Vector2f) override;
+
+    void update();
+
+    void push_back(UIComponent *);
+
+    void push_back(const std::vector<UIComponent *> &);
 };
 
 class MaterialBox : public UIComponent {
@@ -38,13 +68,17 @@ private:
     sf::Text _text;
 
 public:
-    MaterialBox(sf::Vector2f position, sf::Vector2f size, sf::Font &font, const string &text);
+    MaterialBox(sf::Vector2f, sf::Vector2f, sf::Font &, const string &);
 
-    void draw(sf::RenderWindow &window) override;
+    void draw(sf::RenderWindow &) override;
+
+    bool handleEvent(sf::RenderWindow &, sf::Event) override;
+
+    sf::Vector2f getSize() override;
+
+    void setPosition(sf::Vector2f position) override;
 
     void setText(const string &text);
-
-    bool handleEvent(sf::Event event) override;
 };
 
 class MaterialButton : public UIComponent {
@@ -65,13 +99,13 @@ public:
 
     void draw(sf::RenderWindow &window) override;
 
-    bool handleEvent(sf::Event event) override;
+    bool handleEvent(sf::RenderWindow &, sf::Event event) override;
+
+    sf::Vector2f getSize() override;
+
+    void setPosition(sf::Vector2f) override;
 
     void updateEnabled(bool enabled);
-
-    void setPosition(sf::Vector2f);
-
-    sf::Vector2f getPosition();
 
     void setText(const string &text);
 };
@@ -94,7 +128,11 @@ public:
 
     void draw(sf::RenderWindow &window) override;
 
-    bool handleEvent(sf::Event event) override;
+    bool handleEvent(sf::RenderWindow &, sf::Event event) override;
+
+    sf::Vector2f getSize() override;
+
+    void setPosition(sf::Vector2f) override;
 };
 
 class ViewBuilder : public UIComponent {
@@ -108,5 +146,9 @@ public:
 
     void draw(sf::RenderWindow &window) override;
 
-    bool handleEvent(sf::Event event) override;
+    bool handleEvent(sf::RenderWindow &, sf::Event event) override;
+
+    sf::Vector2f getSize() override;
+
+    void setPosition(sf::Vector2f) override;
 };

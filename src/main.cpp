@@ -52,7 +52,7 @@ int main() {
                 handle_window_resize(window);
                 computeTexture();
             } else {
-                uiService.dispatchEvent(event);
+                uiService.dispatchEvent(window, event);
             }
         }
         window.draw(data.sprite);

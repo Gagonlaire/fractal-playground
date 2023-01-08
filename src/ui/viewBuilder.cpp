@@ -14,7 +14,7 @@ void ViewBuilder::draw(sf::RenderWindow &window) {
     }
 }
 
-bool ViewBuilder::handleEvent(sf::Event event) {
+bool ViewBuilder::handleEvent(sf::RenderWindow &, sf::Event event) {
     if (event.type == sf::Event::MouseButtonPressed) {
         _selection.setPosition(event.mouseButton.x, event.mouseButton.y);
         _selection.setSize(sf::Vector2f(0, 0));
@@ -27,10 +27,20 @@ bool ViewBuilder::handleEvent(sf::Event event) {
     } else if (event.type == sf::Event::MouseMoved) {
         if (!_selecting) return false;
 
-        _selection.setSize({
-                                   event.mouseMove.x - _selection.getPosition().x,
-                                   event.mouseMove.y - _selection.getPosition().y
-                           });
+        sf::Vector2f size = {
+                event.mouseMove.x - _selection.getPosition().x,
+                event.mouseMove.y - _selection.getPosition().y
+        };
+
+        _selection.setSize(size);
     }
     return false;
+}
+
+sf::Vector2f ViewBuilder::getSize() {
+    return _selection.getSize();
+}
+
+void ViewBuilder::setPosition(sf::Vector2f) {
+    // Do nothing
 }

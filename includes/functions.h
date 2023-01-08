@@ -33,7 +33,7 @@ static const std::vector<FractalFunction> fractalFunctions = {
         {"mandelbrot",   {-2.8, 1.8, -2.3, 2.3}, 500, mandelbrot},
         {"mandlebar",    {-2.7, 2.7, -2.7, 2.7}, 200, mandlebar},
         {"burning ship", {-2.6, 1.6, -2.2, 1.2}, 400, burning_ship},
-        {"julia 1",      {-1.7, 1.7, -1.7, 1.7}, 400, julia_1},
-        {"julia 2",      {-1.7, 1.7, -1.7, 1.7}, 400, julia_2},
-        {"julia 3",      {-1.7, 1.7, -1.7, 1.7}, 400, julia_3},
+        {"julia 1",      {-1.7, 1.7, -1.7, 1.7}, 500, julia_1},
+        {"julia 2",      {-1.7, 1.7, -1.7, 1.7}, 500, julia_2},
+        {"julia 3",      {-1.8, 1.8, -1.8, 1.8}, 500, julia_3},
 };
