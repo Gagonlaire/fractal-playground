@@ -22,6 +22,7 @@
 * [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
 * [Usage](#usage)
+* [Known Issues](#known-issues)
 * [Contributing](#contributing)
     * [Creating A Pull Request](#creating-a-pull-request)
 * [License](#license)
@@ -68,6 +69,13 @@ The program offer several controls:
 4. The "iterations +/-" buttons let you increase or decrease the maximum number of iterations used to generate the fractal image, which can improve the precision of the image but may also negatively impact performance.
 5. "Reset iterations" restores the default maximum number of iterations.
 
+## Known issues
+
+the program as some known issues:
+
+1. The program is not really optimized for low performance computers.
+2. There is an issue with SFML window resizing causing weird behavior.
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
@@ -83,4 +91,4 @@ Any contributions you make are **greatly appreciated**. If you have any suggesti
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Gagonlaire/fractal-playground/blob/main/LICENSE) for more information.
+Distributed under the GNU License. See [LICENSE](https://github.com/Gagonlaire/fractal-playground/blob/main/LICENSE) for more information.
