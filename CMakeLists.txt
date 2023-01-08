@@ -24,7 +24,9 @@ set(SOURCE_FILES
         src/functions/mandlebrot.cpp
         src/functions/mandlebar.cpp
         src/functions/burning_ships.cpp
-        src/functions/julia.cpp src/complexView.cpp includes/complexView.h)
+        src/functions/julia.cpp
+        src/complexView.cpp
+        includes/complexView.h)
 add_executable(fractal-playground ${SOURCE_FILES})
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)

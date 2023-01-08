@@ -1,7 +1,7 @@
 #include "utils.h"
 #include "functions.h"
 
-#define MAX_ITERATIONS (300 * ITERATION_RATIO)
+#define MAX_ITERATIONS (400 * ITERATION_RATIO)
 
 sf::Color burning_ship(long double re, long double im) {
     long double x = 0;
@@ -21,6 +21,6 @@ sf::Color burning_ship(long double re, long double im) {
     if (iteration == MAX_ITERATIONS) {
         return sf::Color::Black;
     } else {
-        return getColorFromIterations(iteration);
+        return getColorFromIterations(iteration, MAX_ITERATIONS);
     }
 }

@@ -21,6 +21,6 @@ sf::Color mandlebar(long double re, long double im) {
     if (iteration == 200) {
         return sf::Color::Black;
     } else {
-        return getColorFromIterations(iteration);
+        return getColorFromIterations(iteration, MAX_ITERATIONS);
     }
 }

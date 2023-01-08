@@ -1,57 +1,36 @@
 #include "data.h"
 #include "ui.h"
+#include "utils.h"
+#include <array>
 
 RenderOptions options = RenderOptions();
 RenderData data = RenderData();
-auto history = std::vector<ComplexView>();
+std::vector<ComplexView> history;
 
 void handle_window_resize(sf::RenderWindow &window) {
     options.size = window.getSize();
-    data.pixels.resize(options.size.x * options.size.y * 4);
+    data.pixels.resize(options.size.x * options.size.y);
     data.texture.create(options.size.x, options.size.y);
     options.view.adaptToWindowSize(options.size);
 }
 
 void computeTexture() {
-    const int chunkSize = options.size.x * options.size.y / options.threadCount;
-    std::vector<std::thread> threads;
-    size_t start = 0;
     long double re = options.view.minRe;
     long double im = options.view.minIm;
     long double stepRe = (options.view.maxRe - options.view.minRe) / (options.size.x - 1);
     long double stepIm = (options.view.maxIm - options.view.minIm) / (options.size.y - 1);
 
-    for (int i = 0; i < options.threadCount; i++, start += chunkSize) {
-        threads.emplace_back([&](int threadId, size_t start, size_t end) {
-            size_t index = start * 4;
-            int x = start % options.size.x;
-            int y = start / options.size.x;
+    parallelForEach(data.pixels.begin(), data.pixels.end(), [&](auto &pixel, size_t index) {
+        int x = index % options.size.x;
+        int y = index / options.size.x;
+        long double complexRe = re + x * stepRe;
+        long double complexIm = im + y * stepIm;
 
-            while (start < end) {
-                long double complexRe = re + x * stepRe;
-                long double complexIm = im + y * stepIm;
-                sf::Color color = options.function.function(complexRe, complexIm);
+        sf::Color color = options.function.function(complexRe, complexIm);
+        pixel = {color.r, color.g, color.b, color.a};
+    });
 
-                data.pixels[index] = color.r;
-                data.pixels[index + 1] = color.g;
-                data.pixels[index + 2] = color.b;
-                data.pixels[index + 3] = color.a;
-                start++;
-                index += 4;
-                x++;
-                if (x >= options.size.x) {
-                    x = 0;
-                    y++;
-                }
-            }
-        }, i, start, start + chunkSize);
-    }
-
-    for (auto &thread: threads) {
-        thread.join();
-    }
-
-    data.texture.update(data.pixels.data());
+    data.texture.update((uint8_t *) data.pixels.data());
 }
 
 int main() {

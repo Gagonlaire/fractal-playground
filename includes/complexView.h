@@ -23,5 +23,5 @@ public:
 
     RawView getRawView() const;
 
-    ComplexView& operator=(const ComplexView& other) = default;
+    ComplexView &operator=(const ComplexView &other) = default;
 };

@@ -17,8 +17,8 @@ public:
 
 class UiService {
 private:
-    std::vector<UIComponent *> components;
-    sf::Font font;
+    std::vector<UIComponent *> _components;
+    sf::Font _font;
 
 public:
     UiService();
@@ -32,11 +32,11 @@ public:
 
 class MaterialButton : public UIComponent {
 private:
-    sf::RectangleShape shape;
+    sf::RectangleShape _shape;
     sf::Text _text;
-    bool isHovered = false;
-    bool isDisabled = false;
-    std::function<void()> onClick;
+    bool _isHovered = false;
+    bool _isDisabled = false;
+    std::function<void()> _onClick;
 
 public:
     MaterialButton(
@@ -61,11 +61,11 @@ public:
 
 class MaterialSelector : public UIComponent {
 private:
-    MaterialButton *selectBox;
-    std::vector<std::string> options;
-    std::vector<MaterialButton *> options_btn;
-    bool isOpen = false;
-    std::function<void(int)> onSelect;
+    MaterialButton *_selectBox;
+    std::vector<std::string> _options;
+    std::vector<MaterialButton *> _options_btn;
+    bool _isOpen = false;
+    std::function<void(int)> _onSelect;
 
 public:
     MaterialSelector(
@@ -82,9 +82,9 @@ public:
 
 class ViewBuilder : public UIComponent {
 private:
-    bool selecting = false;
-    sf::RectangleShape selection;
-    std::function<void(sf::Vector2f, sf::Vector2f)> onSelection;
+    bool _selecting = false;
+    sf::RectangleShape _selection;
+    std::function<void(sf::Vector2f, sf::Vector2f)> _onSelection;
 
 public:
     explicit ViewBuilder(std::function<void(sf::Vector2f, sf::Vector2f)> onSelection);

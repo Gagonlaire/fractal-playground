@@ -2,10 +2,10 @@
 #include "data.h"
 
 UiService::UiService() {
-    this->font.loadFromFile("resources/Roboto-Regular.ttf");
+    this->_font.loadFromFile("resources/Roboto-Regular.ttf");
 
     // reset view btn
-    this->components.push_back(new MaterialButton({15, 15}, "reset view", font, []() {
+    this->_components.push_back(new MaterialButton({15, 15}, "reset view", _font, []() {
         auto view = options.function.defaultView;
 
         view.adaptToWindowSize(options.size);
@@ -14,7 +14,7 @@ UiService::UiService() {
         history.clear();
     }));
     // view history btn
-    this->components.push_back(new MaterialButton({200, 15}, "go back", font, []() {
+    this->_components.push_back(new MaterialButton({200, 15}, "go back", _font, []() {
         if (!history.empty()) {
             auto value = history.back();
 
@@ -29,17 +29,17 @@ UiService::UiService() {
         _options.push_back(item.name);
     }
     // fractal function selector
-    this->components.push_back(new MaterialSelector({357, 15}, _options, font, [](int index) {
+    this->_components.push_back(new MaterialSelector({357, 15}, _options, _font, [](int index) {
+        options.function = fractalFunctions[index];
         auto view = options.function.defaultView;
 
         view.adaptToWindowSize(options.size);
-        options.function = fractalFunctions[index];
         options.view = view;
         history.clear();
         computeTexture();
     }));
     // always add the view builder at the end
-    this->components.push_back(new ViewBuilder([](sf::Vector2f pos, sf::Vector2f size) {
+    this->_components.push_back(new ViewBuilder([](sf::Vector2f pos, sf::Vector2f size) {
         if (size.x < 10 || size.y < 10) return;
 
         history.emplace_back(options.view);
@@ -57,13 +57,13 @@ UiService::UiService() {
 }
 
 void UiService::draw(sf::RenderWindow &window) {
-    for (auto &component: components) {
+    for (auto &component: _components) {
         component->draw(window);
     }
 }
 
 void UiService::dispatchEvent(sf::Event event) {
-    for (auto &component: components) {
+    for (auto &component: _components) {
         // if component return true, stop the event propagation
         if (component->handleEvent(event)) {
             break;
@@ -72,7 +72,7 @@ void UiService::dispatchEvent(sf::Event event) {
 }
 
 UiService::~UiService() {
-    for (auto &component: components) {
+    for (auto &component: _components) {
         delete component;
     }
 }

@@ -8,7 +8,7 @@
 #include "complexView.h"
 
 struct RenderData {
-    std::vector<sf::Uint8> pixels;
+    std::vector<std::array<uint8_t, 4>> pixels;
     sf::Texture texture;
     sf::Sprite sprite;
 };

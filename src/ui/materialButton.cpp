@@ -3,52 +3,52 @@
 
 MaterialButton::MaterialButton(sf::Vector2f position, const std::string &text, sf::Font &font,
                                std::function<void()> onClick) {
-    this->onClick = std::move(onClick);
-    this->shape.setPosition(position);
-    this->shape.setFillColor(sf::Color::Black);
-    this->shape.setOutlineColor(sf::Color::White);
+    this->_onClick = std::move(onClick);
+    this->_shape.setPosition(position);
+    this->_shape.setFillColor(sf::Color::Black);
+    this->_shape.setOutlineColor(sf::Color::White);
     this->_text.setString(text);
     this->_text.setFillColor(sf::Color::White);
     this->_text.setFont(font);
-    this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
+    this->_shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
     this->_text.setPosition(position + sf::Vector2f(11, 5));
-    this->shape.setOutlineThickness(2);
+    this->_shape.setOutlineThickness(2);
 }
 
 void MaterialButton::draw(sf::RenderWindow &window) {
-    window.draw(shape);
+    window.draw(_shape);
     window.draw(_text);
 }
 
 bool MaterialButton::handleEvent(sf::Event event) {
-    if (this->isDisabled) {return false;}
+    if (this->_isDisabled) {return false;}
 
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
-            if (shape.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                onClick();
+            if (_shape.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                _onClick();
                 return true;
             }
         }
     } else if (event.type == sf::Event::MouseMoved) {
-        if (shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
-            shape.setFillColor(sf::Color::White);
+        if (_shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y)) {
+            _shape.setFillColor(sf::Color::White);
             _text.setFillColor(sf::Color::Black);
-            shape.setOutlineColor(sf::Color::Black );
+            _shape.setOutlineColor(sf::Color::Black );
         } else {
-            shape.setFillColor(sf::Color::Black);
+            _shape.setFillColor(sf::Color::Black);
             _text.setFillColor(sf::Color::White);
-            shape.setOutlineColor(sf::Color::White);
+            _shape.setOutlineColor(sf::Color::White);
         }
     }
     return false;
 }
 
 void MaterialButton::updateEnabled(bool enabled) {
-    this->isDisabled = !enabled;
+    this->_isDisabled = !enabled;
     sf::Color textColor = _text.getFillColor();
-    sf::Color shapeColor = shape.getFillColor();
-    sf::Color outlineColor = shape.getOutlineColor();
+    sf::Color shapeColor = _shape.getFillColor();
+    sf::Color outlineColor = _shape.getOutlineColor();
 
     if (enabled) {
         textColor.a = 255;
@@ -60,21 +60,21 @@ void MaterialButton::updateEnabled(bool enabled) {
         outlineColor.a = 100;
     }
     _text.setFillColor(textColor);
-    shape.setFillColor(shapeColor);
-    shape.setOutlineColor(outlineColor);
+    _shape.setFillColor(shapeColor);
+    _shape.setOutlineColor(outlineColor);
 }
 
 void MaterialButton::setText(const std::string &text) {
     this->_text.setString(text);
-    this->shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
-    this->_text.setPosition(shape.getPosition() + sf::Vector2f(11, 5));
+    this->_shape.setSize({this->_text.getGlobalBounds().width + 25, 50});
+    this->_text.setPosition(_shape.getPosition() + sf::Vector2f(11, 5));
 }
 
 void MaterialButton::setPosition(sf::Vector2f position) {
-    this->shape.setPosition(position);
+    this->_shape.setPosition(position);
     this->_text.setPosition(position + sf::Vector2f(11, 5));
 }
 
 sf::Vector2f MaterialButton::getPosition() {
-    return this->shape.getPosition();
+    return this->_shape.getPosition();
 }
