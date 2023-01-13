@@ -33,4 +33,4 @@ add_executable(fractal-playground ${SOURCE_FILES})
 
 find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS} includes)
-target_link_libraries(fractal-playground sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
+target_link_libraries(fractal-playground sfml-system sfml-window sfml-graphics)

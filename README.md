@@ -75,6 +75,7 @@ the program as some known issues:
 
 1. The program is not really optimized for low performance computers.
 2. There is an issue with SFML window resizing causing weird behavior.
+3. Sometimes the program just doesn't handle clicks.
 
 ## Contributing
 
